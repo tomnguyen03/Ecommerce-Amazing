@@ -1,0 +1,39 @@
+@import "src/App.scss";
+
+.product-item {
+  width: 24%;
+  padding: 10px 20px 20px;
+  margin: 0.5%;
+  border: 1px solid $gray;
+
+  &__image {
+    @include flex(row, center, center);
+    img {
+      height: 150px;
+    }
+  }
+
+  &__title {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    color: $black;
+  }
+
+  &__rating-price {
+    @include flex(row, center, space-between);
+    margin-top: 10px;
+  }
+
+  &__rating {
+    i {
+      color: $yellow;
+      font-size: 14px;
+    }
+  }
+
+  &__price {
+    font-size: 18px;
+    font-weight: 700;
+  }
+}

@@ -1,0 +1,47 @@
+@import "src/App.scss";
+header {
+  display: flex;
+  gap: 20px;
+  padding: 10px;
+  background-color: $dark-blue;
+  margin-bottom: 10px;
+
+  a {
+    display: flex;
+    gap: 5px;
+    font-size: 30px;
+    font-weight: 700;
+    color: $white;
+
+    img {
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  .search-bar {
+    @include flex(row, center, center);
+
+    input {
+      padding: 0 12px;
+      border: 0;
+      border-radius: 5px;
+      height: 30px;
+      width: 270px;
+    }
+
+    .search-btn {
+      @include flex(row, center, center);
+      height: 30px;
+      width: 70px;
+      margin-left: -5px;
+      border-radius: 5px;
+      border: 0;
+      background-color: $yellow;
+      i {
+        font-size: 20px;
+        font-weight: 700;
+      }
+    }
+  }
+}
