@@ -2,7 +2,7 @@ import React from "react";
 import "./productitem.scss";
 
 export default function ProductItem({ ...props }) {
-  const stars = [...Array(5)].map((_, index) =>
+  const stars = [...Array(6)].map((_, index) =>
     index < props.rating ? "bx bxs-star" : "bx bx-star"
   );
   return (

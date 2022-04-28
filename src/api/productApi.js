@@ -16,6 +16,9 @@ export const productApi = {
         limit: params._limit,
         total: response.headers["x-total-count"],
       },
+      params: {
+        ...params,
+      },
     };
   },
 };
