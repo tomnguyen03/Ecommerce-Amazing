@@ -1,46 +1,64 @@
 import React, { useEffect, useState } from "react";
 import "./product.scss";
 import ProductItem from "src/components/ProductItem/ProductItem";
-import { productApi } from "./../../api/productApi";
 import ProductSkelete from "../../components/Skeleton/ProductSkelete";
 import { Pagination, Skeleton } from "@material-ui/lab";
 import Menu from "../../components/Menu/Menu";
+import { useDispatch } from "react-redux";
+import { getProducts } from "./product.slice";
+import { unwrapResult } from "@reduxjs/toolkit";
+import ProductSort from "../../components/sort/sort";
+import useQuery from "./../../hooks/useQuery";
 
 export default function Product() {
+  const dispatch = useDispatch();
   const limit = 16;
+
   const [products, setProducts] = useState([]);
+
   const [paginationData, setPaginationData] = useState({
     limit: limit,
     page: 1,
     total: limit,
   });
   const [loading, setLoading] = useState(true);
-  const [sortBy, setSortBy] = useState("name-asc");
-  const [filterPagination, setFilterPagination] = useState({
-    _page: 1,
-    _limit: limit,
-  });
+
+  //query search
+  const query = useQuery();
+  const [filters, setFilters] = useState(query);
 
   useEffect(() => {
+    const _filters = {
+      ...query,
+      _page: Number.parseInt(query._page) || 1,
+      _limit: Number.parseInt(query._limit) || 16,
+    };
+    setFilters(_filters);
+    const params = {
+      _page: _filters._page,
+      _limit: _filters._limit,
+      _sort: _filters._sort,
+      _order: _filters._order,
+      name_like: _filters.name_like,
+      categories_like: _filters.categories_like,
+      rating_gte: _filters.rating_gte,
+      price_gte: _filters.price_gte,
+      price_lte: _filters.price_lte,
+      type: _filters.type,
+    };
     const _getProducts = async () => {
-      //Sort by
-      const sortType = sortBy.split("-");
-      const params = {
-        ...filterPagination,
-        _sort: sortType[0],
-        _order: sortType[1],
-      };
-      const data = await productApi.getProducts(params);
+      const res = await dispatch(getProducts(params));
+      const data = unwrapResult(res);
       setProducts(data.data);
       setPaginationData(data.pagination);
     };
     _getProducts();
     setLoading(false);
-  }, [sortBy, filterPagination]);
+  }, [query, dispatch]);
 
   //function handle change pagination
   const handleChangePagination = (e, page) => {
-    setFilterPagination((prevFilterPagination) => ({
+    setFilters((prevFilterPagination) => ({
       ...prevFilterPagination,
       _page: page,
     }));
@@ -60,24 +78,13 @@ export default function Product() {
             )}{" "}
             results found
           </div>
-          <div className="product__sort">
-            <label htmlFor="sort"></label>
-            <select
-              name="sort"
-              id="sort"
-              onChange={(event) => setSortBy(event.target.value)}
-            >
-              <option value="name-asc">Name</option>
-              <option value="price-asc">Price ASC</option>
-              <option value="price-desc">Price DESC</option>
-            </select>
-          </div>
+          <ProductSort filters={filters} />
         </div>
         {loading ? (
           <ProductSkelete length={100} />
         ) : (
           <div className="product__list">
-            {products.slice(0, 100).map((product, index) => (
+            {products.map((product, index) => (
               <ProductItem
                 rating={product.rating}
                 image={product.image}
