@@ -3,12 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import "./header.scss";
 import { path } from "./../../constants/path";
 import qs from "query-string";
-import { useSelector } from "react-redux";
-
+import useStore from "../../hooks/useStore";
 export default function Header() {
   const navigate = useNavigate();
-  const filters = useSelector((state) => state.product.params);
-
+  const state = useStore()[0];
+  const filters = state.params;
   const handleChangeSearch = (value) => {
     const _filters = {
       ...filters,

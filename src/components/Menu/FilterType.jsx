@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./filtertype.scss";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { path } from "./../../constants/path";
 import qs from "query-string";
+import useStore from "../../hooks/useStore";
 
 export default function FilterType() {
   const data = [
@@ -15,8 +15,9 @@ export default function FilterType() {
     "Networking",
   ];
   const [type, setType] = useState([]);
-  const filters = useSelector((state) => state.product.params);
+  const state = useStore()[0];
   const navigate = useNavigate();
+  const filters = state.params;
   const handleChange = (e) => {
     const value = e.target.value;
     if (type.indexOf(value) === -1) {

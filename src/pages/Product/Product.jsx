@@ -4,14 +4,13 @@ import ProductItem from "src/components/ProductItem/ProductItem";
 import ProductSkelete from "../../components/Skeleton/ProductSkelete";
 import { Pagination, Skeleton } from "@material-ui/lab";
 import Menu from "../../components/Menu/Menu";
-import { useDispatch } from "react-redux";
-import { getProducts } from "./product.slice";
-import { unwrapResult } from "@reduxjs/toolkit";
 import ProductSort from "../../components/sort/sort";
 import useQuery from "./../../hooks/useQuery";
+import { productApi } from "./../../api/productApi";
+import useStore from "../../hooks/useStore";
+import { actions } from "../../store/index.js";
 
 export default function Product() {
-  const dispatch = useDispatch();
   const limit = 16;
 
   const [products, setProducts] = useState([]);
@@ -26,6 +25,7 @@ export default function Product() {
   //query search
   const query = useQuery();
   const [filters, setFilters] = useState(query);
+  const dispatch = useStore()[1];
 
   useEffect(() => {
     const _filters = {
@@ -47,12 +47,13 @@ export default function Product() {
       type: _filters.type,
     };
     const _getProducts = async () => {
-      const res = await dispatch(getProducts(params));
-      const data = unwrapResult(res);
+      const data = await productApi.getProducts(params);
       setProducts(data.data);
       setPaginationData(data.pagination);
+      dispatch(actions.setParams(data.params));
     };
     _getProducts();
+
     setLoading(false);
   }, [query, dispatch]);
 

@@ -1,14 +1,16 @@
 import React from "react";
 import "./ratingtype.scss";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { path } from "./../../constants/path";
 import qs from "query-string";
+import useStore from "../../hooks/useStore";
 
 export default function FilterRating() {
   const data = [6, 5, 4, 3, 2, 1];
   const navigate = useNavigate();
-  const filters = useSelector((state) => state.product.params);
+  const state = useStore()[0];
+  const filters = state.params;
+
   const handleClick = (value) => {
     const _filters = {
       ...filters,

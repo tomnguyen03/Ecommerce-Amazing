@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import { path } from "./../../constants/path";
 import qs from "query-string";
 import "./filterprice.scss";
 import { useNavigate } from "react-router-dom";
+import useStore from "../../hooks/useStore";
 
 export default function FilterPrice() {
   const navigate = useNavigate();
   const [priceLte, setPriceLte] = useState(9999999);
   const [priceGte, setPriceGte] = useState(0);
-  const filters = useSelector((state) => state.product.params);
+  const state = useStore()[0];
+  const filters = state.params;
   const handleSubmit = () => {
     const _filters = {
       ...filters,

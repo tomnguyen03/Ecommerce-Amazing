@@ -1,9 +1,9 @@
 import { TreeItem, TreeView } from "@material-ui/lab";
 import React from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { path } from "./../../constants/path";
 import qs from "query-string";
+import useStore from "../../hooks/useStore";
 
 const data = {
   id: "root",
@@ -56,7 +56,8 @@ const data = {
 
 export default function FilterCategories() {
   const navigate = useNavigate();
-  const filters = useSelector((state) => state.product.params);
+  const state = useStore()[0];
+  const filters = state.params;
   const handleClick = (value) => {
     if (value === "Menu") value = "";
     const _filters = {
